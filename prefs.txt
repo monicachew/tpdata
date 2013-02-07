@@ -1,0 +1,79 @@
+# Privacy settings
+# Do not track
+privacy.donottrackheader.enabled boolean false
+# Always use private browsing mode ("never remember history" or "use custom
+# settings for history" with first checkbox is checked)
+browser.privatebrowsing.autostart boolean false
+# accept cookies/deny third party/deny all
+network.cookie.cookieBehavior integer 0
+# keep cookies til they expire/I close firefox (interferes with clearOnShutdown)/
+# ask me every time
+network.cookie.lifetimePolicy integer 0
+
+# Remember my browsing and download history (different from clearOnShutdown?)
+places.history.enabled boolean true
+# Remember search and form history (different from clearOnShutdown?)
+browser.formfill.enable boolean true
+
+# Clear history when Firefox closes
+privacy.sanitize.sanitizeOnShutdown boolean false
+
+# only matters if privacy.sanitize.sanitizeOnShutdown is true
+privacy.clearOnShutdown.cache boolean true
+privacy.clearOnShutdown.cookies boolean true
+privacy.clearOnShutdown.downloads boolean true
+privacy.clearOnShutdown.formdata boolean true
+privacy.clearOnShutdown.history boolean false
+privacy.clearOnShutdown.offlineApps boolean false
+privacy.clearOnShutdown.passwords boolean false
+privacy.clearOnShutdown.sessions boolean true
+privacy.clearOnShutdown.siteSettings boolean false
+
+# Location Bar
+# When using the location bar, suggest
+# nothing
+browser.urlbar.autocomplete.enabled boolean true
+# history and bookmarks/history/bookmarks
+browser.urlbar.default.behavior integer 0
+
+# not used
+privacy.cpd.cache boolean true
+privacy.cpd.cookies boolean true
+privacy.cpd.downloads boolean true
+privacy.cpd.formdata boolean true
+privacy.cpd.history boolean true
+privacy.cpd.offlineApps boolean false
+privacy.cpd.passwords boolean false
+privacy.cpd.sessions boolean true
+privacy.cpd.siteSettings boolean false
+
+# Security settings
+# Warn me when sites try to install add-ons
+xpinstall.whitelist.required boolean true
+# Block reported attack sites
+browser.safebrowsing.malware.enabled boolean true
+# Block reported web forgeries
+browser.safebrowsing.enabled boolean true
+# Remember passwords for sites
+signon.rememberSignons boolean true
+# Master password
+security.ask_for_password integer 0
+security.password_lifetime integer 30
+
+# Advanced settings, encryption tab
+security.enable_ssl3 boolean true
+security.enable_tls boolean true
+security.default_personal_cert string AskEveryTime
+security.remember_cert_checkbox_default_setting boolean true
+security.OCSP.enabled integer 1
+security.OCSP.require boolean false
+
+# Search settings
+browser.search.defaultenginename string Google
+browser.search.suggest.enabled boolean true
+
+# security warnings
+security.warn_viewing_mixed default boolean true
+security.warn_viewing_mixed.show_once default boolean true
+security.warn_entering_weak default boolean true
+security.warn_entering_weak.show_once default boolean true
