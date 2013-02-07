@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import errno
-import simplejson
+import json
 import sys
 
 # References: m-c/browser/components/preferences/{security,privacy}.xul
@@ -178,8 +178,8 @@ def process_one_user(data, sample_count):
   uid = buf[0]
   user_data = buf[2]
   try:
-    d = simplejson.loads(user_data)
-  except simplejson.JSONDecodeError, e:
+    d = json.loads(user_data)
+  except:
     errors['baduser'] += 1
     return
   events = d.get('events')
@@ -285,8 +285,8 @@ def finish():
 
 try:
   f = open(sys.argv[1], 'r')
-except error, e:
-  sys.exit("Can't find file ", e)
+except:
+  sys.exit("Can't find file")
 init_maps()
 sample_count = 0
 for l in f.readlines():
