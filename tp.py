@@ -3,6 +3,7 @@
 import errno
 import json
 import sys
+import numpy
 
 # References: m-c/browser/components/preferences/{security,privacy}.xul
 default_prefs = {
@@ -92,7 +93,9 @@ errors = {
   'not_default': 0,
   'accidental_user': 0,
   'accidental_user_one_site': 0,
-  'accidental_user_one_password': 0
+  'accidental_user_one_password': 0,
+  'counted': 0,
+  'not_counted': 0,
 }
 pref_changed = {}
 search = {}
@@ -101,7 +104,6 @@ num_passwords_hist = [0] * 1000
 num_sites_hist = [0] * 1000
 highest_reuse_hist = [0] * 1000
 num_days = [0] * 100
-ratio_hist = []
 sites = []
 
 
@@ -110,7 +112,7 @@ def init_maps():
     pref_changed[p] = 0
     pref_counts[p] = 0
   for i in range(30):
-    sites.append([0] * 30)
+    sites.append([])
 
 
 def process_password_stats(num_passwords, num_sites, highest_reuse, pwd_enabled):
@@ -126,9 +128,11 @@ def process_password_stats(num_passwords, num_sites, highest_reuse, pwd_enabled)
   num_sites_hist[int(num_sites)] += 1
   if highest_reuse != '-Infinity':
     highest_reuse_hist[int(highest_reuse)] += 1
-  if num_sites < 30 and num_passwords < 30:
-    sites[num_sites][num_passwords] += 1
-
+  if num_sites < 30:
+    sites[num_sites].append(num_passwords)
+    errors["counted"] += 1
+  else:
+    errors["not_counted"] += 1
 
 # Security prefs is an map of the form: {pref_name : pref_timeseries]} where
 # pref_timeseries is an array of the form [[t1, v1]]
@@ -247,11 +251,6 @@ def finish():
     f.write('%d, %d\n' % (i, highest_reuse_hist[i]))
   f.close()
 
-  f = open('password_ratio.csv', 'w')
-  for i in range(len(ratio_hist)):
-    f.write('%d, %f\n' % (i, ratio_hist[i]))
-  f.close()
-
   f = open('pref_counts.csv', 'w')
   for p in sorted(pref_counts, key=pref_counts.get):
     f.write('%s, %d\n' % (p, pref_counts[p],))
@@ -274,9 +273,15 @@ def finish():
     f.write('%s, %d\n' % (c, cookies[c],))
   f.close()
 
+  print "sites", sites
   f = open('passwords_per_site.csv', 'w')
-  for i in range(len(sites)):
-    f.write('%d,%s\n' % (i, ",".join(str(x) for x in sites[i])))
+  arr = numpy.array(sites)
+  means = arr.mean(axis=1)
+  std = arr.std(axis=1)
+  print means
+  print std
+  for i in range(len(means)):
+    f.write("%f,%f\n" % (means[i], std[i]))
   f.close()
 
   for e in errors:
